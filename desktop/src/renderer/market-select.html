@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Official Brandfetch logo URLs are kept exact; no third-party origin is
+       permitted except the HTTPS CDN used for these two images. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:;" />
+  <title>Youthnic Packing Desk</title>
+  <link rel="stylesheet" href="market-select.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Youthnic Packing Desk</h1>
+      <p class="subtitle">Choose a marketplace and seller account to begin packing</p>
+    </header>
+
+    <div class="cards">
+      <!-- The account select is outside the button so it remains operable. -->
+      <div class="card-slot" data-marketplace="flipkart">
+        <button class="market-card flipkart" data-marketplace="flipkart">
+          <div class="card-logo">
+            <img src="https://cdn.brandfetch.io/idWdImNSUt/theme/dark/logo.svg?c=1bxz7nrnjqcuvlb6lc2wbkb2gh18SXdPupo"
+                 alt="Flipkart" width="170" height="45" />
+          </div>
+          <div class="card-desc">Checking...</div>
+          <div class="card-action">
+            <span>Select</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </button>
+        <label class="account-picker" hidden>
+          <span>Seller account</span>
+          <select data-marketplace="flipkart"></select>
+        </label>
+      </div>
+
+      <div class="card-slot" data-marketplace="myntra">
+        <button class="market-card myntra" data-marketplace="myntra">
+          <div class="card-logo">
+            <img src="https://cdn.brandfetch.io/idDW82Qwj2/w/820/h/359/theme/dark/logo.png?c=1bxz7nrnjqcuvlb6lc2wbkb2gh18SXdPupo"
+                 alt="Myntra" width="150" height="66" />
+          </div>
+          <div class="card-desc">Checking...</div>
+          <div class="card-action">
+            <span>Select</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </button>
+        <label class="account-picker" hidden>
+          <span>Seller account</span>
+          <select data-marketplace="myntra"></select>
+        </label>
+      </div>
+    </div>
+
+    <div class="status-bar" id="statusBar">
+      <span id="backendStatus">Checking lookup service...</span>
+    </div>
+
+    <div class="footer">
+      <button class="btn-setup btn-update" id="btnUpdates" type="button">Check for updates</button>
+      <button class="btn-setup" id="btnSetup" type="button">Settings</button>
+      <span class="desk-name" id="deskName"></span>
+    </div>
+  </div>
+
+  <script src="market-select.js"></script>
+</body>
+</html>

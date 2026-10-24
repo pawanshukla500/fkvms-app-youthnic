@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# Build output
+dist/
+out/
+build/
+release/
+*.exe
+*.msi
+*.nupkg
+
+# Electron
+desktop/dist/
+desktop/out/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Config backups
+*.env.bak

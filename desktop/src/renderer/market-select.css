@@ -1,0 +1,214 @@
+:root {
+  --bg: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-hover: #0f3460;
+  --text: #e4e4e7;
+  --text-dim: #8b8b9e;
+  /* Brand colours as published by each marketplace (via Brandfetch). */
+  --flipkart: #1c41d6;
+  --myntra: #f41cb2;
+  --border: #2a2a4a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 40px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.cards {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+
+.card-slot {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.account-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.account-picker[hidden] { display: none; }
+
+.account-picker select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+
+.account-picker select:focus { border-color: var(--flipkart); }
+
+.market-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 32px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.market-card:hover {
+  border-color: var(--flipkart);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.market-card.flipkart:hover { border-color: var(--flipkart); }
+.market-card.myntra:hover { border-color: var(--myntra); }
+
+.market-card:active { transform: translateY(-2px); }
+
+/* A marketplace with no VMS URL cannot be launched, so it is dimmed rather
+   than silently failing on click. */
+.market-card[data-ready="false"] { opacity: 0.55; }
+.market-card[data-ready="false"]:hover { transform: none; border-color: var(--border); }
+
+.market-card:disabled { cursor: default; }
+.market-card.loading { opacity: 0.6; transform: none; }
+
+.card-logo {
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The two brand logos have different aspect ratios, so they are contained
+   rather than sized, keeping both cards visually balanced. */
+.card-logo img {
+  max-width: 170px;
+  max-height: 56px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.card-desc {
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.card-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.market-card.flipkart .card-action { color: var(--flipkart); }
+.market-card.myntra .card-action { color: var(--myntra); }
+
+.market-card:hover .card-action {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.status-bar {
+  text-align: center;
+  margin-top: 48px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.status-bar.ok { color: #4ade80; }
+.status-bar.err { color: #f87171; }
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-setup {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-setup:hover {
+  border-color: var(--text-dim);
+  color: var(--text);
+}
+
+.btn-update[data-state="available"],
+.btn-update[data-state="downloaded"] {
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+.btn-update[data-state="error"] {
+  color: #f87171;
+  border-color: #f87171;
+}
+
+.desk-name {
+  font-size: 13px;
+  color: var(--text-dim);
+}

@@ -1,0 +1,63 @@
+{
+  "name": "youthnic-packing-desk",
+  "version": "1.0.0",
+  "description": "Lightweight Windows packing application for Flipkart and Myntra VMS",
+  "main": "src/main/main.js",
+  "author": "Youthnic",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64",
+    "pack": "electron-builder --win --dir"
+  },
+  "build": {
+    "appId": "com.youthnic.packingdesk",
+    "productName": "Youthnic Packing Desk",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Youthnic Packing Desk",
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "pawanshukla500",
+      "repo": "fkvms-app-youthnic",
+      "releaseType": "release"
+    }
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "allowScripts": {
+    "electron@33.4.11": true
+  }
+}

@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: Flipkart VMS Server
+    runtime: node
+    region: singapore
+    plan: starter
+    rootDir: backend
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: false
+    envVars:
+      - key: NODE_VERSION
+        value: 22.5.0
+      - key: VMS_DATABASE_URL
+        sync: false
+      - key: VMS_DATABASE_SSL
+        sync: false
+      - key: VMS_DB_QUERY_TIMEOUT_MS
+        value: "2000"
+      - key: VMS_DB_POOL_MAX
+        value: "5"
+      - key: VMS_LOOKUP_CACHE_SECONDS
+        value: "60"
+      - key: CORS_ALLOWED_ORIGINS
+        value: ""
+
+# This Blueprint is intentionally not responsible for secret values. The
+# GitHub Actions workflow writes the sync:false values from GitHub Secrets to
+# the existing Render service before triggering a deploy.

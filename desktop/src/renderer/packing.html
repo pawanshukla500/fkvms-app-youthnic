@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Product images come from marketplace CDNs over HTTPS only; the backend
+       promotes any stored http:// URL before returning it. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' file: https: data:;" />
+  <title>Packing — Youthnic Packing Desk</title>
+  <link rel="stylesheet" href="packing.css" />
+</head>
+<body>
+  <!--
+    The left region is intentionally empty: the VMS browser view is positioned
+    on top of it by the main process. The widths here must stay in step with
+    VMS_WIDTH_RATIO and SKU_PANEL_MIN_WIDTH in main.js.
+  -->
+  <div class="layout">
+    <div class="vms-area"></div>
+
+    <!--
+      Shown only while the panel is collapsed, so the operator can bring it
+      back after working with the VMS's Pending or Error Requests at full width.
+    -->
+    <button class="panel-reveal" id="btnReveal" hidden title="Show the SKU panel" aria-label="Show SKU panel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <aside class="sku-panel" id="skuPanel">
+      <header class="panel-header">
+        <div class="marketplace-badge" id="marketplaceBadge">
+          <span class="dot"></span>
+          <span class="badge-text">
+            <span id="marketplaceName">VMS</span>
+            <small id="sellerAccountName"></small>
+          </span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-back" id="btnCollapse" title="Hide panel and give the VMS full width"
+                  aria-label="Hide SKU panel">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button class="btn-back" id="btnBack" title="Back to marketplace selection" aria-label="Back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Administrator-level configuration problems, not per-scan status. -->
+      <div class="config-warning" id="configWarning" hidden></div>
+
+      <div class="vms-status">
+        <span class="status-item" id="statusItem" data-state="idle">Starting...</span>
+      </div>
+
+      <div class="sku-content">
+        <section class="sku-state sku-centered" data-state="empty">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="9" cy="9" r="2" />
+            <path d="M21 15l-5-5L5 21" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <p>Scan a tracking barcode in the VMS</p>
+        </section>
+
+        <section class="sku-state sku-centered" data-state="loading" hidden>
+          <div class="spinner"></div>
+          <p class="mono" id="loadingBarcode"></p>
+        </section>
+
+        <section class="sku-state sku-centered is-warning" data-state="notfound" hidden>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" stroke-linecap="round" />
+          </svg>
+          <p class="mono" id="notFoundTracking"></p>
+          <p class="hint" id="notFoundHint"></p>
+          <button class="btn-retry" data-action="retry">Retry</button>
+        </section>
+
+        <section class="sku-state sku-centered is-error" data-state="error" hidden>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v4M12 16h.01" stroke-linecap="round" />
+          </svg>
+          <p id="errorMsg"></p>
+          <p class="hint">The VMS keeps recording and uploading normally.</p>
+          <button class="btn-retry" data-action="retry">Retry</button>
+        </section>
+
+        <section class="sku-state sku-found" data-state="found" hidden>
+          <div class="tracking-id mono" id="foundTracking"></div>
+          <!--
+            Shown when the parcel belongs to a different marketplace or seller
+            account than this desk is packing. It is a warning, never a block:
+            the operator is holding the parcel and still needs to see what is
+            inside it.
+          -->
+          <div class="alert-notice" id="mismatchNotice" hidden></div>
+          <div class="multi-sku" id="multiSkuNotice" hidden></div>
+          <div class="items" id="itemsList"></div>
+          <div class="order-meta" id="orderMeta"></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <script src="packing.js"></script>
+</body>
+</html>

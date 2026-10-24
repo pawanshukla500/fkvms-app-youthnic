@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:;" />
+  <title>Setup — Youthnic Packing Desk</title>
+  <link rel="stylesheet" href="setup.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="wizard">
+      <header class="wizard-header">
+        <h1>Packing Desk Setup</h1>
+        <p>Administrator configuration. Operators will not need to change these settings.</p>
+      </header>
+
+      <div class="steps">
+        <div class="step" data-step="1"><span class="step-num">1</span><span class="step-label">Device</span></div>
+        <div class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Flipkart</span></div>
+        <div class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Myntra</span></div>
+        <div class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Accounts</span></div>
+        <div class="step" data-step="5"><span class="step-num">5</span><span class="step-label">Backend</span></div>
+        <div class="step" data-step="6"><span class="step-num">6</span><span class="step-label">Activate</span></div>
+      </div>
+
+      <p class="notice" id="notice" hidden></p>
+
+      <section class="step-panel" data-step="1">
+        <h2>Device identity</h2>
+        <p class="field-desc">Each packing computer needs its own identity and session storage.</p>
+
+        <div class="form-field">
+          <label for="deviceId">Device ID</label>
+          <div class="input-row">
+            <input type="text" id="deviceId" readonly />
+            <button class="btn-small" id="btnGenDevice" type="button">Regenerate</button>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="deskName">Packing desk name</label>
+          <input type="text" id="deskName" placeholder="e.g. Desk A-1" />
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="2" hidden>
+        <h2>Flipkart VMS</h2>
+        <p class="field-desc">Leave blank to skip Flipkart on this desk.</p>
+
+        <div class="form-field">
+          <label for="fkUrl">VMS URL</label>
+          <input type="text" id="fkUrl" placeholder="https://fkvms.synlabs.io/" />
+        </div>
+        <div class="form-field">
+          <label for="fkUsername">Username</label>
+          <input type="text" id="fkUsername" autocomplete="off" />
+        </div>
+        <div class="form-field">
+          <label for="fkPassword">Password</label>
+          <input type="password" id="fkPassword" autocomplete="new-password" />
+        </div>
+        <div class="form-field">
+          <label for="fkFeedId">Feed ID</label>
+          <input type="text" id="fkFeedId" placeholder="Feed ID for this desk" />
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="3" hidden>
+        <h2>Myntra VMS</h2>
+        <p class="field-desc">
+          Myntra automation is not verified yet. Once a URL is set the app will open the site,
+          but login and Feed ID must be completed by the operator.
+        </p>
+
+        <div class="form-field">
+          <label for="myUrl">VMS URL</label>
+          <input type="text" id="myUrl" placeholder="https://..." />
+        </div>
+        <div class="form-field">
+          <label for="myUsername">Username</label>
+          <input type="text" id="myUsername" autocomplete="off" />
+        </div>
+        <div class="form-field">
+          <label for="myPassword">Password</label>
+          <input type="password" id="myPassword" autocomplete="new-password" />
+        </div>
+        <div class="form-field">
+          <label for="myFeedId">Feed ID</label>
+          <input type="text" id="myFeedId" />
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="4" hidden>
+        <h2>Seller accounts</h2>
+        <p class="field-desc">
+          The accounts this desk packs for. The Channel ID is Forward Scan's own
+          <code>channels.id</code>, which is what tells apart a tracking ID that exists under
+          more than one account. Load them from the backend to be sure the IDs are right;
+          leave an ID as 0 to search the whole marketplace.
+        </p>
+
+        <div class="accounts" id="accountsList"></div>
+
+        <div class="button-row">
+          <button class="btn-small" id="btnAddAccount" type="button">Add account</button>
+          <button class="btn-small" id="btnLoadAccounts" type="button">Load from Forward Scan</button>
+        </div>
+        <p class="test-result" id="accountsResult" hidden></p>
+      </section>
+
+      <section class="step-panel" data-step="5" hidden>
+        <h2>Lookup backend</h2>
+        <p class="field-desc">
+          The service that reads the Forward Scan database. Packing desks never connect
+          to PostgreSQL themselves.
+        </p>
+
+        <div class="form-field">
+          <label for="backendUrl">Backend API URL</label>
+          <input type="text" id="backendUrl" placeholder="http://192.168.1.50:3100" />
+        </div>
+
+        <button class="btn-test" id="btnTestBackend" type="button">Test connection</button>
+        <p class="test-result" id="testResult"></p>
+      </section>
+
+      <section class="step-panel" data-step="6" hidden>
+        <h2>Review and activate</h2>
+        <p class="field-desc">Confirm the configuration for this desk.</p>
+
+        <div class="review" id="review"></div>
+
+        <p class="warning">
+          <strong>Note:</strong> passwords are encrypted with Windows credential protection and
+          are tied to this Windows user account. Settings can be changed later from the
+          Settings button on the marketplace screen.
+        </p>
+      </section>
+
+      <div class="wizard-nav">
+        <button class="btn-secondary" id="btnPrev" type="button">Previous</button>
+        <button class="btn-primary" id="btnNext" type="button">Next</button>
+        <button class="btn-primary" id="btnActivate" type="button" hidden>Activate</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="setup.js"></script>
+</body>
+</html>
