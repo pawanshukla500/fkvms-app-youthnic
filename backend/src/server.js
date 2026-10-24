@@ -52,6 +52,16 @@ app.use((req, res, next) => {
   return next();
 });
 
+/**
+ * Liveness probe: answers as long as the HTTP server is running, without
+ * touching the database. Render's health check points here so a reachable-but-
+ * not-yet-provisioned database does not keep an otherwise healthy deploy from
+ * going live. Use /api/health for the deep readiness check.
+ */
+app.get('/api/live', (req, res) => {
+  res.status(200).json({ status: 'alive', uptimeSeconds: Math.round(process.uptime()) });
+});
+
 /** Is the service able to answer lookups at all. */
 app.get('/api/health', async (req, res) => {
   const source = describeSource();

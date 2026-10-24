@@ -6,11 +6,11 @@ services:
     plan: starter
     buildCommand: cd backend && npm ci --omit=dev
     startCommand: cd backend && npm start
-    healthCheckPath: /api/health
+    healthCheckPath: /api/live
     autoDeploy: false
     envVars:
       - key: NODE_VERSION
-        value: 22.5.0
+        value: 22.12.0
       - key: VMS_DATABASE_URL
         sync: false
       - key: VMS_DATABASE_SSL
