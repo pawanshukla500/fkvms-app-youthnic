@@ -18,9 +18,14 @@ import pg from 'pg';
 import dotenv from 'dotenv';
 import fs from 'node:fs';
 import path from 'node:path';
-import { DatabaseSync } from 'node:sqlite';
+import { createRequire } from 'node:module';
 
 dotenv.config();
+
+// `node:sqlite` is only available unflagged on newer Node releases. Load it
+// lazily, only when the SQLite driver is actually selected, so a PostgreSQL
+// deployment boots on any supported Node version without the module present.
+const require = createRequire(import.meta.url);
 
 const { Pool } = pg;
 
@@ -140,7 +145,9 @@ function getSqlite() {
     if (!fs.existsSync(file)) {
       throw new Error(`Forward Scan SQLite file not found: ${file}`);
     }
-    // readOnly is enforced by SQLite itself, not by this process.
+    // Required here rather than imported at the top so the PostgreSQL path
+    // never loads the module. readOnly is enforced by SQLite itself.
+    const { DatabaseSync } = require('node:sqlite');
     sqliteDb = new DatabaseSync(file, { readOnly: true });
   }
   return sqliteDb;
