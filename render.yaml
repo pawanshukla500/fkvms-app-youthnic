@@ -4,9 +4,8 @@ services:
     runtime: node
     region: singapore
     plan: starter
-    rootDir: backend
-    buildCommand: npm ci --omit=dev
-    startCommand: npm start
+    buildCommand: cd backend && npm ci --omit=dev
+    startCommand: cd backend && npm start
     healthCheckPath: /api/health
     autoDeploy: false
     envVars:

@@ -367,9 +367,11 @@ The service is configured by `render.yaml` as a Node web service named
 **Flipkart VMS Server** on the Starter plan. The service uses Render's
 `PORT`, `/api/health`, and `npm ci --omit=dev`.
 
-The requested Render project is `prj-db7k1pl9fdbs73ehkmc0`. The project
-currently has no service, so create the service from the GitHub repository after
-the first push, or create it from the Blueprint and record its service ID.
+The requested Render project is `prj-db7k1pl9fdbs73ehkmc0`. The service created
+for this deployment is `srv-dbe6ro0ae00c73c3tsh0`
+(`https://flipkart-vms-server.onrender.com`). Its Render environment link is
+not exposed by the current Render API operation, so confirm that it appears
+under the project's **Production** environment in the dashboard before use.
 
 Do not put database credentials in `render.yaml`. The GitHub Actions workflow
 expects `RENDER_API_KEY`, `RENDER_SERVICE_ID`, `VMS_DATABASE_URL`, and
