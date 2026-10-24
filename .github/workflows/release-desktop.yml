@@ -27,12 +27,23 @@ jobs:
         working-directory: desktop
         run: npm ci
 
+      - name: Align app version with release tag
+        working-directory: desktop
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_TYPE -eq "tag") {
+            $version = $env:GITHUB_REF_NAME.Substring(1)
+            npm version $version --no-git-tag-version
+          }
+
       - name: Build installer
         working-directory: desktop
         run: npm run dist
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           generate_release_notes: true
           files: |
