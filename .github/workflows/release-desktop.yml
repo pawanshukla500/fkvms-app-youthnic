@@ -38,7 +38,7 @@ jobs:
 
       - name: Build installer
         working-directory: desktop
-        run: npm run dist
+        run: npm run dist -- --publish never
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
