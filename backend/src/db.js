@@ -90,11 +90,21 @@ function resolveSsl(connectionString) {
 
   const configured = (process.env.VMS_DATABASE_SSL || '').toLowerCase();
 
-  if (configured === 'disable' || mode === 'disable') return false;
-  if (configured === 'no-verify' || mode === 'require' || mode === 'prefer') {
+  // An explicit deployment setting wins over a URL hint. In particular,
+  // sslmode=require means encryption without certificate verification in
+  // libpq terminology, but this service's documented default is verify.
+  if (configured === 'disable') return false;
+  if (configured === 'no-verify') {
     return { rejectUnauthorized: false };
   }
-  if (configured === 'verify' || mode === 'verify-full' || mode === 'verify-ca') {
+  if (configured === 'verify') {
+    return { rejectUnauthorized: true };
+  }
+  if (mode === 'disable') return false;
+  if (mode === 'require' || mode === 'prefer') {
+    return { rejectUnauthorized: false };
+  }
+  if (mode === 'verify-full' || mode === 'verify-ca') {
     return { rejectUnauthorized: true };
   }
   // No TLS preference expressed: leave it to the driver's default so a plain
