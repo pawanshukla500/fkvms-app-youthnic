@@ -37,23 +37,26 @@ jobs:
           VMS_DATABASE_SSL: ${{ secrets.VMS_DATABASE_SSL }}
         run: |
           set -euo pipefail
+          python3 - <<'PY' > env-vars.json
+          import json, os
+          payload = []
+          db_url = os.environ.get("VMS_DATABASE_URL", "").strip()
+          if db_url:
+              payload.append({"key": "VMS_DATABASE_URL", "value": db_url})
+          db_ssl = os.environ.get("VMS_DATABASE_SSL", "").strip()
+          if db_ssl:
+              payload.append({"key": "VMS_DATABASE_SSL", "value": db_ssl})
+          print(json.dumps(payload))
+          PY
 
-          put_env() {
-            key="$1"
-            value="$2"
-            curl --fail --silent --show-error \
-              -X PUT "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/env-vars/${key}" \
+          if [ -s env-vars.json ] && [ "$(cat env-vars.json)" != "[]" ]; then
+            curl -sS --fail-with-body -X PUT \
+              "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/env-vars" \
               -H "Authorization: Bearer ${RENDER_API_KEY}" \
               -H "Content-Type: application/json" \
-              --data "$(jq -n --arg value "${value}" '{value: $value}')"
-          }
-
-          if [ -n "${VMS_DATABASE_URL}" ]; then
-            put_env VMS_DATABASE_URL "${VMS_DATABASE_URL}"
+              --data @env-vars.json
           fi
-          if [ -n "${VMS_DATABASE_SSL}" ]; then
-            put_env VMS_DATABASE_SSL "${VMS_DATABASE_SSL}"
-          fi
+          rm -f env-vars.json
 
       - name: Trigger Render deploy
         if: steps.creds.outputs.configured == 'true'
