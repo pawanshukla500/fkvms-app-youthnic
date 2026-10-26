@@ -16,7 +16,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check Render credentials
+        id: creds
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          if [ -z "${RENDER_API_KEY}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "RENDER_API_KEY not set — skipping Render sync/deploy."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Push runtime secrets to Render
+        if: steps.creds.outputs.configured == 'true'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
@@ -35,10 +48,15 @@ jobs:
               --data "$(jq -n --arg value "${value}" '{value: $value}')"
           }
 
-          put_env VMS_DATABASE_URL "${VMS_DATABASE_URL}"
-          put_env VMS_DATABASE_SSL "${VMS_DATABASE_SSL}"
+          if [ -n "${VMS_DATABASE_URL}" ]; then
+            put_env VMS_DATABASE_URL "${VMS_DATABASE_URL}"
+          fi
+          if [ -n "${VMS_DATABASE_SSL}" ]; then
+            put_env VMS_DATABASE_SSL "${VMS_DATABASE_SSL}"
+          fi
 
       - name: Trigger Render deploy
+        if: steps.creds.outputs.configured == 'true'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
